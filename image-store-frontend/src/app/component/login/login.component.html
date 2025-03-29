@@ -1,0 +1,16 @@
+<div class="container">
+    <h2 class="heading">Login</h2>
+    <form #loginForm="ngForm" (ngSubmit)="submitForm(loginForm)">
+
+        <div class="form-group">
+            <label for="name">Email</label>
+            <input type="text" class="form-control" id="email" name="email" [(ngModel)]="loginData.email" required
+                email>
+            <div *ngIf="loginForm.controls[loginData.email]?.touched && loginForm.controls[loginData.email].invalid"
+                class="text-danger">
+                Email is required.
+            </div>
+        </div>
+
+    </form>
+</div>

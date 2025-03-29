@@ -1,0 +1,2 @@
+GET http://localhost:8080/image-store/list
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJpbWFnZS1zdG9yZS1hcGkiLCJpYXQiOjE3NDMwNDQxODcsImV4cCI6MTc0MzA1ODU4Nywic3ViIjoid2FyZG9nMUBnbWFpbC5jb20ifQ.up6ZPCdBRfR4BI_0Zkt6vTx9yDMt1bThlWLhIcpLacg
