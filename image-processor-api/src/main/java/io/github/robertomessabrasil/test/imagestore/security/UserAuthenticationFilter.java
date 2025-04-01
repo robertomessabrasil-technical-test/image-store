@@ -30,6 +30,12 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
 
+        boolean isOptions = (req.getMethod().equals("OPTIONS"));
+        if (isOptions) {
+            filterChain.doFilter(req, res);
+            return;
+        }
+
         boolean isEndpointPublic = isEndpointPublic(req);
         if (isEndpointPublic) {
             filterChain.doFilter(req, res);

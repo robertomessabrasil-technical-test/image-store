@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/image-store")
+@CrossOrigin
 public class S3Controller {
 
     @Autowired
@@ -22,7 +23,7 @@ public class S3Controller {
     @Autowired
     private BucketService bucketService;
 
-    @GetMapping("/list")
+    @GetMapping
     ResponseEntity<List<String>> getFileList() {
         List<String> objectsInBucket = bucketService.listObjectsInBucket(config.getBucket());
         return ResponseEntity.ok(objectsInBucket);

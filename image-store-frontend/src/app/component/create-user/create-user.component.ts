@@ -1,19 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { CreateUserService } from '../../service/create-user.service';
+import { CreateUser } from '../../model/create-user';
 import { NgIf } from '@angular/common';
-import { LoginService } from '../../service/login.service';
-import { Login } from '../../model/login';
+import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-create-user',
   imports: [FormsModule, NgIf, RouterLink],
-  standalone: true,
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  templateUrl: './create-user.component.html',
+  styleUrl: './create-user.component.css'
 })
-export class LoginComponent implements OnInit {
+export class CreateUserComponent implements OnInit {
+
+  panel: string = 'FORM';
 
   email: string = '';
   password: string = '';
@@ -28,13 +29,10 @@ export class LoginComponent implements OnInit {
       console.log(this.email);
       console.log(this.password);
 
-      let login: Login = { email: this.email, password: this.password }
+      let createUser: CreateUser = { email: this.email, password: this.password, role: "ROLE_CUSTOMER" }
 
-      this.loginService.login(login).subscribe({
-        next: (loginData) => {
-          sessionStorage.setItem(environment.tokenId, loginData.token);
-          this.router.navigate(['/list-images']);
-        },
+      this.createUserService.createUser(createUser).subscribe({
+        next: () => { this.panel = 'MSG' },
         error: (error) => this.errorMessage = error
       });
 
@@ -49,6 +47,6 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  constructor(private loginService: LoginService, private router: Router) { }
+  constructor(private createUserService: CreateUserService, private router: Router) { }
 
 }
