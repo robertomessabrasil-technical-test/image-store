@@ -1,7 +1,7 @@
 package io.github.robertomessabrasil.test.imagestore.controller;
 
 import io.github.robertomessabrasil.test.imagestore.service.s3.BucketService;
-import io.github.robertomessabrasil.test.imagestore.service.s3.ConfigProperties;
+import io.github.robertomessabrasil.test.imagestore.security.ConfigProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
@@ -14,7 +14,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/image-store")
-@CrossOrigin
 public class S3Controller {
 
     @Autowired

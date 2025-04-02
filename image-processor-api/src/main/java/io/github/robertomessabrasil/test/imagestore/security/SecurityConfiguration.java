@@ -30,9 +30,10 @@ public class SecurityConfiguration {
     };
 
     public static final String[] AUTHENTICATION_REQUIRED_ENDPOINT = {
-            "/image/list",
-            "/image/upload",
-            "/image/download/**"
+            "/image-store/list",
+            "/image-store/upload",
+            "/image-store/download/**",
+            "/image-handler/resize"
     };
 
     public static final String[] ADMIN_ENDPOINT = {
@@ -40,18 +41,7 @@ public class SecurityConfiguration {
     };
 
     @Bean
-//    @SuppressWarnings("removal")
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-
-//        SecurityFilterChain securityFilterChain = httpSecurity.csrf().disable()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and().authorizeHttpRequests()
-//                .requestMatchers(NO_AUTHENTICATION_ENDPOINT).permitAll()
-//                .requestMatchers(AUTHENTICATION_REQUIRED_ENDPOINT).authenticated()
-//                .requestMatchers(ADMIN_ENDPOINT).hasRole("ADMINISTRATOR")
-//                .anyRequest().denyAll()
-//                .and().addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-//                .build();
 
         SecurityFilterChain securityFilterChain = httpSecurity
                 .cors(c -> c.configurationSource(corsConfigurationSource()))
@@ -64,13 +54,6 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-
-//        SecurityFilterChain securityFilterChain = httpSecurity
-//                .csrf(csrf -> csrf.disable())
-//                .authorizeHttpRequests(authorize -> authorize
-//                        .anyRequest().permitAll())
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .build();
 
         return securityFilterChain;
 
@@ -88,6 +71,7 @@ public class SecurityConfiguration {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
@@ -96,6 +80,7 @@ public class SecurityConfiguration {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+
     }
 
 }

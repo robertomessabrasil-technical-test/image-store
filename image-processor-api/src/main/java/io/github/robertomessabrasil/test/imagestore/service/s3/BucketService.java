@@ -2,6 +2,7 @@ package io.github.robertomessabrasil.test.imagestore.service.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
+import io.github.robertomessabrasil.test.imagestore.security.ConfigProperties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
