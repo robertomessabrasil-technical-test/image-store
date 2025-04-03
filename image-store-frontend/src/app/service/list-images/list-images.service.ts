@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
-import { Image } from '../model/image';
+import { environment } from '../../../environments/environment';
+import { ImageDto } from './image-dto';
 import { Observable, retry, catchError, throwError } from 'rxjs';
 
 @Injectable({
@@ -21,12 +21,12 @@ export class ListImagesService {
 
   }
 
-  listImages(): Observable<Image[]> {
+  listImages(): Observable<ImageDto[]> {
 
     let url = this.url;
-    
+
     return this.httpClient
-      .get<Image[]>(url, this.httpOptions)
+      .get<ImageDto[]>(url, this.httpOptions)
       .pipe(
         retry(2),
         catchError(this.handleError)

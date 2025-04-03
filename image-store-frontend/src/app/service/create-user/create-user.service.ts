@@ -1,8 +1,9 @@
 import { HttpHeaders, HttpErrorResponse, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, retry, catchError, throwError } from 'rxjs';
-import { CreateUser } from '../model/create-user';
-import { environment } from '../../environments/environment';
+import { CreateUserDto } from './create-user-dto';
+import { environment } from '../../../environments/environment';
+import { UserDto } from './user-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +16,11 @@ export class CreateUserService {
     headers: new HttpHeaders({ 'Content-type': 'application/json' })
   }
 
-  createUser(createUser: CreateUser): Observable<CreateUser> {
+  createUser(createUser: CreateUserDto): Observable<UserDto> {
 
     let url = this.url;
 
-    return this.httpClient.post<CreateUser>(url, JSON.stringify(createUser), this.httpOptions)
+    return this.httpClient.post<UserDto>(url, JSON.stringify(createUser), this.httpOptions)
       .pipe(
         retry(2),
         catchError(this.handleError)

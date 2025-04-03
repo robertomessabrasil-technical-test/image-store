@@ -1,9 +1,9 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Login } from '../model/login';
+import { LoginDto } from './login-dto';
 import { catchError, Observable, retry, throwError } from 'rxjs';
-import { LoginData } from '../model/login-data';
-import { environment } from '../../environments/environment';
+import { LoginDataDto } from '../../dto/login-data-dto';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -16,11 +16,11 @@ export class LoginService {
     headers: new HttpHeaders({ 'Content-type': 'application/json' })
   }
 
-  login(login: Login): Observable<LoginData> {
+  login(login: LoginDto): Observable<LoginDataDto> {
 
     let url = this.url + '/login';
 
-    return this.httpClient.post<LoginData>(url, JSON.stringify(login), this.httpOptions)
+    return this.httpClient.post<LoginDataDto>(url, JSON.stringify(login), this.httpOptions)
       .pipe(
         retry(2),
         catchError(this.handleError)

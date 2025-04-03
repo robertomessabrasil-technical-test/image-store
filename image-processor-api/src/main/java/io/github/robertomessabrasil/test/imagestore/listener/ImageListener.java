@@ -1,8 +1,10 @@
-package io.github.robertomessabrasil.test.imagestore;
+package io.github.robertomessabrasil.test.imagestore.listener;
 
 import com.amazonaws.services.sqs.AmazonSQS;
+import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.ReceiveMessageResult;
-import io.github.robertomessabrasil.test.imagestore.security.ConfigProperties;
+import io.github.robertomessabrasil.test.imagestore.security.AwsConfigProperties;
+import io.github.robertomessabrasil.test.imagestore.service.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -14,38 +16,50 @@ import java.util.regex.Pattern;
 @Service
 public class ImageListener {
 
-    private static final String SQS_QUEUE = "robertomessabrasil-test-image-store";
+    @Autowired
+    private AwsConfigProperties awsConfig;
 
     @Autowired
-    ConfigProperties config;
+    private AmazonSQS sqsClient;
 
     @Autowired
-    AmazonSQS sqsClient;
+    private ImageService imageService;
 
     private static final Logger logger = Logger.getLogger(ImageListener.class.getName());
 
     @Scheduled(fixedDelay = 2000)
     public void consumeMessages() {
+
         try {
-            String queueUrl = sqsClient.getQueueUrl(SQS_QUEUE).getQueueUrl();
+
+            String queueUrl = sqsClient.getQueueUrl(awsConfig.getQueueName()).getQueueUrl();
 
             ReceiveMessageResult receiveMessageResult = sqsClient.receiveMessage(queueUrl);
 
-            if (!receiveMessageResult.getMessages().isEmpty()) {
-                com.amazonaws.services.sqs.model.Message message = receiveMessageResult.getMessages().get(0);
-                logger.info(getMessage(message.getBody()));
-                sqsClient.deleteMessage(queueUrl, message.getReceiptHandle());
+            if (receiveMessageResult.getMessages().isEmpty()) {
+                return;
             }
+
+            Message sqsMessage = receiveMessageResult.getMessages().get(0);
+
+            String message = getMessage(sqsMessage.getBody());
+
+            String[] messageParts = message.split("\\:");
+
+            imageService.resizeImage(messageParts[0], Integer.parseInt(messageParts[1]));
+
+            sqsClient.deleteMessage(queueUrl, sqsMessage.getReceiptHandle());
+
 
         } catch (Exception e) {
             logger.info(e.getMessage());
         }
     }
-// "Message" : "cachorro.png:50",
+
     private String getMessage(String messageBody) {
         Pattern pattern = Pattern.compile("\"Message\" : \"(.*)\",");
         Matcher matcher = pattern.matcher(messageBody);
-        if(matcher.find()) {
+        if (matcher.find()) {
             return matcher.group(1);
         }
         return "No message line";

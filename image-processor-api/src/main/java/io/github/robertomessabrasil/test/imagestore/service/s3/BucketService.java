@@ -2,7 +2,8 @@ package io.github.robertomessabrasil.test.imagestore.service.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
-import io.github.robertomessabrasil.test.imagestore.security.ConfigProperties;
+import io.github.robertomessabrasil.test.imagestore.security.AwsConfigProperties;
+import io.github.robertomessabrasil.test.imagestore.security.LocalConfigProperties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,15 @@ import java.util.stream.Collectors;
 @Service
 public class BucketService {
 
-    Logger logger = LogManager.getLogger(BucketService.class);
+    private static final Logger logger = LogManager.getLogger(BucketService.class);
 
     @Autowired
-    ConfigProperties config;
+    private AwsConfigProperties config;
+    @Autowired
+    private LocalConfigProperties localConfig;
 
     @Autowired
-    AmazonS3 s3Client;
+    private AmazonS3 s3Client;
 
     public List<String> listObjectsInBucket(String bucketName) {
         ObjectListing objectListing = s3Client.listObjects(bucketName);
@@ -38,7 +41,7 @@ public class BucketService {
     public void getObjectFromBucket(String bucketName, String objectName) throws IOException {
         S3Object s3Object = s3Client.getObject(bucketName, objectName);
         S3ObjectInputStream inputStream = s3Object.getObjectContent();
-        File file = new File(config.getUploadFolder() + "/" + objectName);
+        File file = new File(localConfig.getUploadFolder() + "/" + objectName);
         file.createNewFile();
         FileOutputStream fos = new FileOutputStream(file);
         byte[] read_buf = new byte[1024];

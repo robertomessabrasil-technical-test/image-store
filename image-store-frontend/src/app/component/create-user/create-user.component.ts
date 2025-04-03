@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CreateUserService } from '../../service/create-user.service';
-import { CreateUser } from '../../model/create-user';
+import { CreateUserService } from '../../service/create-user/create-user.service';
+import { CreateUserDto } from '../../service/create-user/create-user-dto';
 import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -26,10 +26,7 @@ export class CreateUserComponent implements OnInit {
 
     if (form.valid) {
 
-      console.log(this.email);
-      console.log(this.password);
-
-      let createUser: CreateUser = { email: this.email, password: this.password, role: "ROLE_CUSTOMER" }
+      let createUser: CreateUserDto = { email: this.email, password: this.password, role: "ROLE_CUSTOMER" }
 
       this.createUserService.createUser(createUser).subscribe({
         next: () => { this.panel = 'MSG' },

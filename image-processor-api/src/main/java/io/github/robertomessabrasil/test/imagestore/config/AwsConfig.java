@@ -9,17 +9,16 @@ import com.amazonaws.services.sns.AmazonSNSClient;
 import com.amazonaws.services.sns.AmazonSNSClientBuilder;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
-import io.github.robertomessabrasil.test.imagestore.security.ConfigProperties;
+import io.github.robertomessabrasil.test.imagestore.security.AwsConfigProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Configuration
 public class AwsConfig {
 
     @Autowired
-    ConfigProperties config;
+    AwsConfigProperties config;
 
     @Bean
     public AmazonS3 s3Client() {

@@ -1,19 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Pipe, PipeTransform } from '@angular/core';
-import { ImageService } from '../service/image.service';
-import { SecurityService } from '../service/security.service';
-import { Observable } from 'rxjs';
+import { SecurityService } from '../service/security/security.service';
 import { lastValueFrom } from 'rxjs';
 
 @Pipe({
   name: 'image'
 })
 export class ImagePipe implements PipeTransform {
-
-  constructor(
-    private http: HttpClient,
-    private security: SecurityService
-  ) { }
 
   async transform(src: string): Promise<string> {
 
@@ -24,7 +17,7 @@ export class ImagePipe implements PipeTransform {
     const imageBlob = this.http.get(src, { headers, responseType: 'blob' });
 
     const imageBlob1 = await lastValueFrom(imageBlob);
-    
+
     const reader = new FileReader();
 
     return new Promise((resolve, reject) => {
@@ -37,8 +30,8 @@ export class ImagePipe implements PipeTransform {
 
   }
 
+  constructor(private http: HttpClient, private security: SecurityService) { }
+
 }
-function firstValueFrom(arg0: Observable<ArrayBuffer>) {
-  throw new Error('Function not implemented.');
-}
+
 

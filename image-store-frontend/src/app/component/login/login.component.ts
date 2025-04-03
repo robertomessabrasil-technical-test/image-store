@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
-import { LoginService } from '../../service/login.service';
-import { Login } from '../../model/login';
+import { LoginService } from '../../service/login/login.service';
+import { LoginDto } from '../../service/login/login-dto';
 import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
@@ -25,17 +25,19 @@ export class LoginComponent implements OnInit {
 
     if (form.valid) {
 
-      console.log(this.email);
-      console.log(this.password);
-
-      let login: Login = { email: this.email, password: this.password }
+      let login: LoginDto = { email: this.email, password: this.password }
 
       this.loginService.login(login).subscribe({
+
         next: (loginData) => {
+
           sessionStorage.setItem(environment.tokenId, loginData.token);
           this.router.navigate(['/list-images']);
+
         },
+
         error: (error) => this.errorMessage = error
+
       });
 
     }
@@ -43,10 +45,13 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     let isLogged: boolean = (sessionStorage.getItem(environment.tokenId) != null);
+
     if (isLogged) {
       this.router.navigate(['/list-images']);
     }
+
   }
 
   constructor(private loginService: LoginService, private router: Router) { }

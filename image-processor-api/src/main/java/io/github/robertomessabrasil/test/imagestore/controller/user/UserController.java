@@ -3,6 +3,7 @@ package io.github.robertomessabrasil.test.imagestore.controller.user;
 import io.github.robertomessabrasil.test.imagestore.controller.user.dto.CreateUserDto;
 import io.github.robertomessabrasil.test.imagestore.controller.user.dto.LoginUserDto;
 import io.github.robertomessabrasil.test.imagestore.controller.user.dto.RecoveryJwtTokenDto;
+import io.github.robertomessabrasil.test.imagestore.controller.user.dto.UserDto;
 import io.github.robertomessabrasil.test.imagestore.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,9 +24,12 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createUser(@RequestBody CreateUserDto createUserDto) {
+    public ResponseEntity<UserDto> createUser(@RequestBody CreateUserDto createUserDto) {
+
         userService.createUser(createUserDto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        UserDto userDto = new UserDto(createUserDto.email(), createUserDto.role());
+        return ResponseEntity.ok(userDto);
+
     }
 
 }

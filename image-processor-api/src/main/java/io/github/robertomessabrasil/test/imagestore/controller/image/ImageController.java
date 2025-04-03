@@ -2,6 +2,7 @@ package io.github.robertomessabrasil.test.imagestore.controller.image;
 
 import io.github.robertomessabrasil.test.imagestore.service.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,11 +17,11 @@ public class ImageController {
     ImageService imageService;
 
     @PostMapping
-    public ResponseEntity<String> resizeImage(@RequestBody ResizeImageDto resizeImageDto) {
+    public ResponseEntity resizeImage(@RequestBody ResizeImageDto resizeImageDto) {
 
-        imageService.resizeImage(resizeImageDto.fileName(), resizeImageDto.percentage());
+        imageService.sendResizeImageNotification(resizeImageDto.fileName(), resizeImageDto.percentage());
 
-        return ResponseEntity.ok("");
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
 
     }
 

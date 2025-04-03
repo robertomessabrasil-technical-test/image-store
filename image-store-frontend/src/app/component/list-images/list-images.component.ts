@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Router, RouterLink } from '@angular/router';
-import { ListImagesService } from '../../service/list-images.service';
-import { Image } from '../../model/image'
+import { ListImagesService } from '../../service/list-images/list-images.service';
+import { ImageDto } from '../../service/list-images/image-dto';
 
 @Component({
   selector: 'app-list-images',
@@ -12,9 +12,9 @@ import { Image } from '../../model/image'
 })
 export class ListImagesComponent implements OnInit {
 
-  url:string = `${environment.apiHost}/download/`;
+  url: string = `${environment.apiHost}/download/`;
 
-  imageList: Image[] = [];
+  imageList: ImageDto[] = [];
 
   logout(): void {
     sessionStorage.removeItem(environment.tokenId);
@@ -33,7 +33,7 @@ export class ListImagesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
     let isLogged: boolean = (sessionStorage.getItem(environment.tokenId) != null);
 
     if (!isLogged) {

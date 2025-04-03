@@ -1,7 +1,8 @@
 package io.github.robertomessabrasil.test.imagestore.controller;
 
+import io.github.robertomessabrasil.test.imagestore.security.LocalConfigProperties;
 import io.github.robertomessabrasil.test.imagestore.service.s3.BucketService;
-import io.github.robertomessabrasil.test.imagestore.security.ConfigProperties;
+import io.github.robertomessabrasil.test.imagestore.security.AwsConfigProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
@@ -17,27 +18,29 @@ import java.util.List;
 public class S3Controller {
 
     @Autowired
-    private ConfigProperties config;
+    private AwsConfigProperties awsConfig;
+    @Autowired
+    private LocalConfigProperties localConfig;
 
     @Autowired
     private BucketService bucketService;
 
     @GetMapping
     ResponseEntity<List<String>> getFileList() {
-        List<String> objectsInBucket = bucketService.listObjectsInBucket(config.getBucket());
+        List<String> objectsInBucket = bucketService.listObjectsInBucket(awsConfig.getBucket());
         return ResponseEntity.ok(objectsInBucket);
     }
 
     @PostMapping("/upload")
     ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) throws IOException {
-        bucketService.pubObjectIntoBucket(file, config.getBucket(), file.getOriginalFilename());
+        bucketService.pubObjectIntoBucket(file, awsConfig.getBucket(), file.getOriginalFilename());
         return ResponseEntity.ok(file.getOriginalFilename());
     }
 
     @GetMapping(value = "/download/{fileName}", produces = MediaType.IMAGE_JPEG_VALUE)
     public FileSystemResource getFile(@PathVariable("fileName") String fileName) throws IOException {
-        bucketService.getObjectFromBucket(config.getBucket(), fileName);
-        return new FileSystemResource(config.getUploadFolder() + "/" + fileName);
+        bucketService.getObjectFromBucket(awsConfig.getBucket(), fileName);
+        return new FileSystemResource(localConfig.getUploadFolder() + "/" + fileName);
     }
 
 }
