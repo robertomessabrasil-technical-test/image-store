@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../../environments/environment';
-import { SecurityService } from '../../service/security.service';
+import { SecurityService } from '../../service/security/security.service';
 
 @Component({
   selector: 'app-upload',
