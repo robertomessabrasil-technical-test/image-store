@@ -1,4 +1,4 @@
-package io.github.robertomessabrasil.test.imagestore.controller;
+package io.github.robertomessabrasil.test.imagestore.controller.image;
 
 import io.github.robertomessabrasil.test.imagestore.security.LocalConfigProperties;
 import io.github.robertomessabrasil.test.imagestore.service.s3.BucketService;
