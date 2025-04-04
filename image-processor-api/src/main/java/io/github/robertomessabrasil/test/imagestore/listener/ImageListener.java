@@ -1,7 +1,6 @@
 package io.github.robertomessabrasil.test.imagestore.listener;
 
 import com.amazonaws.services.sqs.AmazonSQS;
-import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.ReceiveMessageResult;
 import io.github.robertomessabrasil.test.imagestore.security.AwsConfigProperties;
 import io.github.robertomessabrasil.test.imagestore.service.image.ImageService;
@@ -9,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,15 +41,21 @@ public class ImageListener {
                 return;
             }
 
-            Message sqsMessage = receiveMessageResult.getMessages().get(0);
+            receiveMessageResult.getMessages().forEach(sqsMessage -> {
 
-            String message = getMessage(sqsMessage.getBody());
+                String message = getMessage(sqsMessage.getBody());
 
-            String[] messageParts = message.split("\\:");
+                String[] messageParts = message.split("\\:");
 
-            imageService.resizeImage(messageParts[0], Integer.parseInt(messageParts[1]));
+                try {
+                    imageService.resizeImage(messageParts[0], Integer.parseInt(messageParts[1]));
+                } catch (IOException e) {
+                    logger.log(Level.ALL, e.getMessage());
+                }
 
-            sqsClient.deleteMessage(queueUrl, sqsMessage.getReceiptHandle());
+                sqsClient.deleteMessage(queueUrl, sqsMessage.getReceiptHandle());
+
+            });
 
 
         } catch (Exception e) {
