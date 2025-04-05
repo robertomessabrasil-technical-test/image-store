@@ -1,0 +1,8 @@
+POST http://localhost:8080/image-handler HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJpbWFnZS1zdG9yZS1hcGkiLCJpYXQiOjE3NDM2MzIyOTMsImV4cCI6MTc0MzY0NjY5Mywic3ViIjoid2FyZG9nMUBnbWFpbC5jb20ifQ.Z46WrS_LRB0GFwJ719fJLziTA44NFYp2eaUhZO7C4p0
+
+{
+    "fileName": "cachorro.png",
+    "percentage": 50
+}

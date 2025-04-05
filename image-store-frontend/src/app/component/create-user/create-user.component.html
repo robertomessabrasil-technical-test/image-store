@@ -1,0 +1,46 @@
+<div class="container" *ngIf="panel == 'FORM'">
+
+    <h2 class="heading">Create User</h2>
+
+    <form #createUserForm="ngForm" (ngSubmit)="submitForm(createUserForm)">
+
+        <div class="form-group">
+
+            <label for="name">Email</label>
+            <input type="text" class="form-control" id="email" name="email" [(ngModel)]="email" required email>
+
+            <div *ngIf="createUserForm.controls['email'].touched && createUserForm.controls['email'].invalid"
+                class="text-danger">
+                Email is required.
+            </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" [(ngModel)]="password" required
+                minlength="1">
+
+            <div *ngIf="createUserForm.controls['password'].touched && createUserForm.controls['password'].invalid"
+                class="text-danger">
+                Password is required.
+            </div>
+
+        </div>
+
+        <button type="submit" [disabled]="!createUserForm.valid" class="btn btn-primary">Submit</button>
+
+    </form>
+
+    <div class="text-danger">{{errorMessage}}</div>
+
+    <div><a routerLink="/login">Login</a></div>
+
+</div>
+
+<div class="container" *ngIf="panel == 'MSG'">
+    <h2 class="heading">Message</h2>
+    <p>User created!</p>
+    <div><a routerLink="/login">Login</a></div>
+</div>

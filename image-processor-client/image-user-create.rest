@@ -1,0 +1,8 @@
+POST http://localhost:8080/image-user HTTP/1.1
+content-type: application/json
+
+{
+    "email": "wardog1@gmail.com",
+    "password": "aaa",
+    "role": "ROLE_CUSTOMER"
+}

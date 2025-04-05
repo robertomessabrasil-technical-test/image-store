@@ -1,0 +1,12 @@
+<button type="button" (click)="logout()" class="btn btn-link" style="padding: 0%;">Logout</button><br>
+<a routerLink="/upload">Upload</a>
+
+<h2 class="heading">Images</h2>
+
+<div class="form-group">
+
+    @for (image of imageList; track $index) {
+    <a routerLink="/image/{{image}}">{{image}}</a><br>
+    }
+
+</div>
