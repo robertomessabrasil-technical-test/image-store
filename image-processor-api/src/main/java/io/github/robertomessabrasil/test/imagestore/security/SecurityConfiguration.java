@@ -26,7 +26,9 @@ public class SecurityConfiguration {
 
     public static final String[] NO_AUTHENTICATION_ENDPOINT = {
             "/image-user/login",
-            "/image-user"
+            "/image-user",
+            "/v3/api-docs/**",
+            "/swagger-ui/**"
     };
 
     public static final String[] AUTHENTICATION_REQUIRED_ENDPOINT = {

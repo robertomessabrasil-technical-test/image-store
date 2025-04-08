@@ -3,16 +3,18 @@ import { Component, Input } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { SecurityService } from '../../service/security/security.service';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-upload',
-  imports: [RouterLink],
+  imports: [RouterLink, NgIf],
   templateUrl: './upload.component.html',
   styleUrl: './upload.component.css'
 })
 export class UploadComponent {
 
   url: string = environment.apiHost + '/image-store/upload';
+
   httpOptions = {
 
     headers: new HttpHeaders({
@@ -24,6 +26,7 @@ export class UploadComponent {
   }
 
   fileName = '';
+  errorMessage: string = '';
 
   constructor(private http: HttpClient, private security: SecurityService, private router: Router) { }
 
@@ -42,8 +45,10 @@ export class UploadComponent {
       const upload$ = this.http.post(this.url, formData, this.httpOptions);
 
       upload$.subscribe({
+
         next: () => this.router.navigate(['/list-images']),
-        error: () => this.router.navigate(['/list-images'])
+        error: (error) => this.errorMessage = error
+
       });
     }
   }

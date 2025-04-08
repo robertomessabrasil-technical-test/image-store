@@ -1,8 +1,6 @@
 <a routerLink="/">Back</a>
 
-<input type="file" class="file-input"
-       accept="image/png"
-       (change)="onFileSelected($any($event))" #fileUpload>
+<input type="file" class="file-input" accept="image/png" (change)="onFileSelected($any($event))" #fileUpload>
 
 <div class="file-upload">
 
@@ -11,4 +9,9 @@
     <button class="btn btn-primary" (click)="fileUpload.click()">
         Upload
     </button>
+
+    <div *ngIf="errorMessage != ''" class="text-danger">
+        File must be png and smaller than 200Kb.
+    </div>
+
 </div>

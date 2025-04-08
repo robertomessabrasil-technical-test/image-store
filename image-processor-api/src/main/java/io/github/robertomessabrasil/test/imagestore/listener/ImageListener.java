@@ -4,6 +4,7 @@ import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.model.ReceiveMessageResult;
 import io.github.robertomessabrasil.test.imagestore.security.AwsConfigProperties;
 import io.github.robertomessabrasil.test.imagestore.service.image.ImageService;
+import io.github.robertomessabrasil.test.imagestore.service.s3.BucketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,8 @@ import java.util.regex.Pattern;
 @Service
 public class ImageListener {
 
+    private static final Logger logger = Logger.getLogger(ImageListener.class.getName());
+
     @Autowired
     private AwsConfigProperties awsConfig;
 
@@ -26,9 +29,15 @@ public class ImageListener {
     @Autowired
     private ImageService imageService;
 
-    private static final Logger logger = Logger.getLogger(ImageListener.class.getName());
+    @Autowired
+    private BucketService bucketService;
 
-    @Scheduled(fixedDelay = 2000)
+    @Scheduled(fixedRate = 5 * 60 * 1000)
+    public void emptyBucket() {
+        bucketService.emptyBucket(awsConfig.getBucket());
+    }
+
+    @Scheduled(fixedRate = 2000)
     public void consumeMessages() {
 
         try {

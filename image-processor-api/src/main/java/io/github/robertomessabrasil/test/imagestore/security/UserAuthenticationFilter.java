@@ -74,8 +74,14 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
 
         String uri = req.getRequestURI();
         boolean isEndpointPublic = Arrays.asList(SecurityConfiguration.NO_AUTHENTICATION_ENDPOINT).contains(uri);
-        return isEndpointPublic;
-
+        if (isEndpointPublic) {
+            return true;
+        }
+        boolean isSwagger = uri.startsWith("/v3/api-docs") || uri.startsWith("/swagger-ui");
+        if (isSwagger) {
+            return true;
+        }
+        return false;
     }
 
 }

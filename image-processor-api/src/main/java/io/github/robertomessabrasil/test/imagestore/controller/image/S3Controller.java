@@ -1,10 +1,11 @@
 package io.github.robertomessabrasil.test.imagestore.controller.image;
 
+import io.github.robertomessabrasil.test.imagestore.security.AwsConfigProperties;
 import io.github.robertomessabrasil.test.imagestore.security.LocalConfigProperties;
 import io.github.robertomessabrasil.test.imagestore.service.s3.BucketService;
-import io.github.robertomessabrasil.test.imagestore.security.AwsConfigProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +34,12 @@ public class S3Controller {
 
     @PostMapping("/upload")
     ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) throws IOException {
+        boolean isGraterThen1MB = (file.getSize() > 200 * 1024);
+        if(isGraterThen1MB) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         bucketService.pubObjectIntoBucket(file, awsConfig.getBucket(), file.getOriginalFilename());
-        return ResponseEntity.ok(file.getOriginalFilename());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(value = "/download/{fileName}", produces = MediaType.IMAGE_JPEG_VALUE)

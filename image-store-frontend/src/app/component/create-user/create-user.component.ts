@@ -29,8 +29,11 @@ export class CreateUserComponent implements OnInit {
       let createUser: CreateUserDto = { email: this.email, password: this.password, role: "ROLE_CUSTOMER" }
 
       this.createUserService.createUser(createUser).subscribe({
+
         next: () => { this.panel = 'MSG' },
+        
         error: (error) => this.errorMessage = error
+
       });
 
     }
@@ -38,10 +41,13 @@ export class CreateUserComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     let isLogged: boolean = (sessionStorage.getItem(environment.tokenId) != null);
+
     if (isLogged) {
       this.router.navigate(['/list-images']);
     }
+
   }
 
   constructor(private createUserService: CreateUserService, private router: Router) { }

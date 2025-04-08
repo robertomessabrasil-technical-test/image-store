@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,6 +64,18 @@ public class BucketService {
         objectMetadata.setContentType(file.getContentType());
         objectMetadata.setContentLength(file.getSize());
         s3Client.putObject(bucketName, objectName, file.getInputStream(), objectMetadata);
+    }
+
+    public void emptyBucket(String bucketName) {
+
+        ObjectListing objectListing = s3Client.listObjects(bucketName);
+
+        Iterator<S3ObjectSummary> objIter = objectListing.getObjectSummaries().iterator();
+
+        while (objIter.hasNext()) {
+            s3Client.deleteObject(bucketName, objIter.next().getKey());
+        }
+
     }
 
 }
